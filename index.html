@@ -10,7 +10,7 @@
   <input type="text" id="name" placeholder="Enter your name">
 </label><br><br>
 
-<!-- PTO Input: Initially hidden -->
+<!-- Hidden PTO input and Submit PTO button -->
 <div id="ptoFields" style="display:none;">
   <label>PTO Hours:
     <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
@@ -18,7 +18,7 @@
   <button onclick="clockInOut('Request PTO')">Submit PTO</button><br><br>
 </div>
 
-<!-- Action Buttons -->
+<!-- Clock In / Out + Reveal PTO -->
 <button onclick="clockInOut('Clock In')">Clock In</button>
 <button onclick="clockInOut('Clock Out')">Clock Out</button>
 <button onclick="showPTO()">Request PTO</button>
