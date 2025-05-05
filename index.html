@@ -4,18 +4,30 @@
   <title>Clock In / Clock Out</title>
 </head>
 <body>
-  <h2>Clock In / Out</h2>
+  <h2>Clock In / Out / PTO</h2>
+
   <label>Name:
     <input type="text" id="name" placeholder="Enter your name">
   </label><br><br>
-  
+
+  <div id="ptoFields" style="display:none;">
+    <label>PTO Hours:
+      <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
+    </label><br><br>
+  </div>
+
   <button onclick="clockInOut('Clock In')">Clock In</button>
   <button onclick="clockInOut('Clock Out')">Clock Out</button>
+  <button onclick="showPTO()">Request PTO</button>
 
   <p id="status"></p>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHYLDMHBTv3v8jBrhuUBJ4f5zXtGgpEIGfoUyjaJ54VAsIq6ccOy7fHyRWPWZHFxOx/exec";
+    const WEB_APP_URL = "YOUR_WEB_APP_URL";
+
+    function showPTO() {
+      document.getElementById("ptoFields").style.display = "block";
+    }
 
     function clockInOut(action) {
       if (!navigator.geolocation) {
@@ -23,39 +35,45 @@
         return;
       }
 
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          const name = document.getElementById("name").value;
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const name = document.getElementById("name").value;
+        const ptoHours = document.getElementById("ptoHours").value;
 
-          if (!name) {
-            alert("Please enter your name.");
+        if (!name) {
+          alert("Please enter your name.");
+          return;
+        }
+
+        const formData = new URLSearchParams();
+        formData.append("name", name);
+        formData.append("action", action);
+        formData.append("lat", lat);
+        formData.append("lng", lng);
+
+        if (action === "Request PTO") {
+          if (!ptoHours || ptoHours <= 0) {
+            alert("Please enter a valid number of PTO hours.");
             return;
           }
-
-          const formData = new URLSearchParams();
-          formData.append("name", name);
-          formData.append("action", action);
-          formData.append("lat", lat);
-          formData.append("lng", lng);
-
-          fetch(WEB_APP_URL, {
-            method: "POST",
-            body: formData,
-          })
-            .then((res) => res.text())
-            .then((data) => {
-              document.getElementById("status").innerText = "Submitted successfully!";
-            })
-            .catch((err) => {
-              document.getElementById("status").innerText = "Submission failed.";
-            });
-        },
-        (error) => {
-          alert("Geolocation failed: " + error.message);
+          formData.append("ptoHours", ptoHours);
         }
-      );
+
+        fetch(WEB_APP_URL, {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("status").innerText = "Submitted successfully!";
+            document.getElementById("ptoFields").style.display = "none";
+            document.getElementById("ptoHours").value = "";
+          })
+          .catch((err) => {
+            document.getElementById("status").innerText = "Submission failed.";
+          });
+      });
     }
   </script>
 </body>
