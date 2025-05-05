@@ -32,52 +32,52 @@
       document.getElementById("ptoFields").style.display = "block";
     }
 
-    function clockInOut(action) {
-      if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser.");
+function clockInOut(action) {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    const name = document.getElementById("name").value;
+    const ptoHours = document.getElementById("ptoHours").value;
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("name", name);
+    formData.append("action", action);
+    formData.append("lat", lat);
+    formData.append("lng", lng);
+
+    if (action === "Request PTO") {
+      if (!ptoHours || ptoHours <= 0) {
+        alert("Please enter valid PTO hours.");
         return;
       }
-
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const name = document.getElementById("name").value;
-        const ptoHours = document.getElementById("ptoHours").value;
-
-        if (!name) {
-          alert("Please enter your name.");
-          return;
-        }
-
-        const formData = new URLSearchParams();
-        formData.append("name", name);
-        formData.append("action", action);
-        formData.append("lat", lat);
-        formData.append("lng", lng);
-
-        if (action === "Request PTO") {
-          if (!ptoHours || ptoHours <= 0) {
-            alert("Please enter a valid number of PTO hours.");
-            return;
-          }
-          formData.append("ptoHours", ptoHours);
-        }
-
-        fetch(WEB_APP_URL, {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.text())
-          .then((data) => {
-            document.getElementById("status").innerText = "Submitted successfully!";
-            document.getElementById("ptoFields").style.display = "none";
-            document.getElementById("ptoHours").value = "";
-          })
-          .catch((err) => {
-            document.getElementById("status").innerText = "Submission failed.";
-          });
-      });
+      formData.append("ptoHours", ptoHours);  // ✅ Add it here!
     }
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        document.getElementById("status").innerText = "Submitted successfully!";
+        document.getElementById("ptoFields").style.display = "none";
+        document.getElementById("ptoHours").value = "";
+      })
+      .catch((err) => {
+        document.getElementById("status").innerText = "Submission failed.";
+      });
+  });
+}
   </script>
 </body>
 </html>
