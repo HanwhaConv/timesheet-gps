@@ -67,12 +67,14 @@
           method: "POST",
           body: formData
         })
-        .then(res => res.text())
-        .then((data) => {
-          document.getElementById("status").innerText = data || "Submitted successfully!";
-          document.getElementById("ptoFields").style.display = "none";
-          document.getElementById("ptoHours").value = "";
+        .then((res) => {
+          res.text().then(txt => {
+            document.getElementById("status").innerText = txt;
+            document.getElementById("ptoFields").style.display = "none";
+            document.getElementById("ptoHours").value = "";
+          });
         })
+
         .catch(() => {
           document.getElementById("status").innerText = "Submission failed.";
         });
