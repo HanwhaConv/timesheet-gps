@@ -68,8 +68,8 @@
           body: formData
         })
         .then(res => res.text()) // this returns a Promise
-        .then((txt) => {
-          document.getElementById("status").innerText = txt;  // this shows full JSON string
+        .then(() => {
+          document.getElementById("status").innerText = "Success!";
           document.getElementById("ptoFields").style.display = "none";
           document.getElementById("ptoHours").value = "";
         })
