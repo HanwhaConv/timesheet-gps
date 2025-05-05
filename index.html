@@ -6,21 +6,24 @@
 <body>
   <h2>Clock In / Out / PTO</h2>
 
-  <label>Name:
-    <input type="text" id="name" placeholder="Enter your name">
+<label>Name:
+  <input type="text" id="name" placeholder="Enter your name">
+</label><br><br>
+
+<!-- PTO Input: Initially hidden -->
+<div id="ptoFields" style="display:none;">
+  <label>PTO Hours:
+    <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
   </label><br><br>
+  <button onclick="clockInOut('Request PTO')">Submit PTO</button><br><br>
+</div>
 
-  <div id="ptoFields" style="display:none;">
-    <label>PTO Hours:
-      <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
-    </label><br><br>
-  </div>
+<!-- Action Buttons -->
+<button onclick="clockInOut('Clock In')">Clock In</button>
+<button onclick="clockInOut('Clock Out')">Clock Out</button>
+<button onclick="showPTO()">Request PTO</button>
 
-  <button onclick="clockInOut('Clock In')">Clock In</button>
-  <button onclick="clockInOut('Clock Out')">Clock Out</button>
-  <button onclick="clockInOut('Request PTO')">Submit PTO</button>
-
-  <p id="status"></p>
+<p id="status"></p>
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHYLDMHBTv3v8jBrhuUBJ4f5zXtGgpEIGfoUyjaJ54VAsIq6ccOy7fHyRWPWZHFxOx/exec";
