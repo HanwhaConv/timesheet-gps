@@ -1,21 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clock In / Clock Out / PTO</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      max-width: 480px;
+      margin: 0 auto;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 0.5rem 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background-color: #4a90e2;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #357ab8;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: green;
+    }
+
+    #ptoFields {
+      background-color: #eef4ff;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body>
+
   <h2>Clock In / Out / PTO</h2>
 
-  <label>Name:
-    <input type="text" id="name" placeholder="Enter your name">
-  </label><br><br>
+  <label for="name">Name:</label>
+  <input type="text" id="name" placeholder="Enter your name">
 
-  <!-- PTO input field -->
+  <!-- PTO input -->
   <div id="ptoFields" style="display:none;">
-    <label>PTO Hours:
-      <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
-    </label><br><br>
-    <button onclick="clockInOut('Request PTO')">Submit PTO</button><br><br>
+    <label for="ptoHours">PTO Hours:</label>
+    <input type="number" id="ptoHours" min="1" max="12" placeholder="Enter PTO hours">
+    <button onclick="clockInOut('Request PTO')">Submit PTO</button>
   </div>
 
   <!-- Action buttons -->
@@ -26,7 +91,7 @@
   <p id="status"></p>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHYLDMHBTv3v8jBrhuUBJ4f5zXtGgpEIGfoUyjaJ54VAsIq6ccOy7fHyRWPWZHFxOx/exec"; // Replace with your deployed Web App URL
+    const WEB_APP_URL = "YOUR_WEB_APP_URL"; // 🔁 Replace with your real URL
 
     function showPTO() {
       document.getElementById("ptoFields").style.display = "block";
@@ -60,7 +125,7 @@
             alert("Enter PTO hours between 1–12.");
             return;
           }
-          formData.append("ptoHours", ptoHours); // ✅ Append PTO hours
+          formData.append("ptoHours", ptoHours);
         }
 
         fetch(WEB_APP_URL, {
@@ -78,5 +143,6 @@
       });
     }
   </script>
+
 </body>
 </html>
