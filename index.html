@@ -67,17 +67,16 @@
           method: "POST",
           body: formData
         })
-        .then((res) => {
-          res.text().then(txt => {
-            document.getElementById("status").innerText = txt;
-            document.getElementById("ptoFields").style.display = "none";
-            document.getElementById("ptoHours").value = "";
-          });
+        .then(res => res.text()) // this returns a Promise
+        .then((txt) => {
+          document.getElementById("status").innerText = txt;  // this shows full JSON string
+          document.getElementById("ptoFields").style.display = "none";
+          document.getElementById("ptoHours").value = "";
         })
-
         .catch(() => {
           document.getElementById("status").innerText = "Submission failed.";
         });
+
       });
     }
   </script>
