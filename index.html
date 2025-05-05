@@ -28,55 +28,57 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHYLDMHBTv3v8jBrhuUBJ4f5zXtGgpEIGfoUyjaJ54VAsIq6ccOy7fHyRWPWZHFxOx/exec;  // 🔁 Replace this!
 
-    function showPTO() {
-      document.getElementById("ptoFields").style.display = "block";
-    }
-
     function clockInOut(action) {
+      const buttons = document.querySelectorAll("button");
+      buttons.forEach(btn => btn.disabled = true); // 🔒 Disable all buttons
+    
       if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.");
+        buttons.forEach(btn => btn.disabled = false); // 🔓 Re-enable
         return;
       }
-
+    
       navigator.geolocation.getCurrentPosition((position) => {
         const name = document.getElementById("name").value;
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         const ptoHours = document.getElementById("ptoHours").value;
-
+    
         if (!name) {
           alert("Please enter your name.");
+          buttons.forEach(btn => btn.disabled = false); // 🔓 Re-enable
           return;
         }
-
+    
         const formData = new URLSearchParams();
         formData.append("name", name);
         formData.append("action", action);
         formData.append("lat", lat);
         formData.append("lng", lng);
-
+    
         if (action === "Request PTO") {
           if (!ptoHours || ptoHours <= 0) {
             alert("Enter PTO hours between 1–12.");
+            buttons.forEach(btn => btn.disabled = false); // 🔓 Re-enable
             return;
           }
-          formData.append("ptoHours", ptoHours);  // ✅ Append to request
+          formData.append("ptoHours", ptoHours);
         }
-
+    
         fetch(WEB_APP_URL, {
           method: "POST",
           body: formData
         })
-        .then(res => res.text()) // this returns a Promise
         .then(() => {
           document.getElementById("status").innerText = "Success!";
           document.getElementById("ptoFields").style.display = "none";
           document.getElementById("ptoHours").value = "";
+          buttons.forEach(btn => btn.disabled = false); // 🔓 Re-enable after success
         })
         .catch(() => {
           document.getElementById("status").innerText = "Submission failed.";
+          buttons.forEach(btn => btn.disabled = false); // 🔓 Re-enable after error
         });
-
       });
     }
   </script>
