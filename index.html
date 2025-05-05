@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clock In / Clock Out</title>
+</head>
+<body>
+  <h2>Clock In / Out</h2>
+  <label>Name:
+    <input type="text" id="name" placeholder="Enter your name">
+  </label><br><br>
+  
+  <button onclick="clockInOut('Clock In')">Clock In</button>
+  <button onclick="clockInOut('Clock Out')">Clock Out</button>
+
+  <p id="status"></p>
+
+  <script>
+    const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE";
+
+    function clockInOut(action) {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const name = document.getElementById("name").value;
+
+          if (!name) {
+            alert("Please enter your name.");
+            return;
+          }
+
+          const formData = new URLSearchParams();
+          formData.append("name", name);
+          formData.append("action", action);
+          formData.append("lat", lat);
+          formData.append("lng", lng);
+
+          fetch(WEB_APP_URL, {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => res.text())
+            .then((data) => {
+              document.getElementById("status").innerText = "Submitted successfully!";
+            })
+            .catch((err) => {
+              document.getElementById("status").innerText = "Submission failed.";
+            });
+        },
+        (error) => {
+          alert("Geolocation failed: " + error.message);
+        }
+      );
+    }
+  </script>
+</body>
+</html>
